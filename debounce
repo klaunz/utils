@@ -1,16 +1,23 @@
 function debounce(fn, delay = 500) {
-  let timeoutId
+  let timeoutId, lastArgs
 
-  const debounceFn = (...args) => {
+  function debounceFn(...args) {
+    lastArgs = args
     clearTimeout(timeoutId)
     timeoutId = setTimeout(() => {
+      timeoutId = null
       fn(...args)
     }, delay)
   }
 
   debounceFn.cancel = () => {
-    if (timeoutId) clearTimeout(timeoutId)
+    clearTimeout(timeoutId)
+    timeoutId = null
   }
 
+  debounceFn.flush = () => {
+    clearTimeout(timeoutId)
+    if (lastArgs) fn(...lastArgs)
+  }
   return debounceFn
 }
