@@ -13,17 +13,16 @@ export default function distanceConverter(
   from: Unit,
   to: Unit
 ): number | undefined {
-  const conversionRates: Record<Unit, number> = {
+  const kmPerUnit: Record<RadiusUnit, number> = {
     km: 1,
-    m: 1000,
+    m: 0.001,
     mi: 1.60934,
-    ft: 3280.84,
+    ft: 0.0003048,
   }
 
-  if (!conversionRates[from] || !conversionRates[to]) return undefined
+  if (!kmPerUnit[from] || !kmPerUnit[to]) return undefined
   if (from === to) return input
 
-  const inKm = input / conversionRates[from]
-  const result = inKm * conversionRates[to]
-  return result
+  const inKm = input * kmPerUnit[from]
+  return (inKm / kmPerUnit[to]).toFixed(2)
 }
